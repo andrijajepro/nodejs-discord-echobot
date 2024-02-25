@@ -1,37 +1,24 @@
 const Discord = require('discord.js');
 const { exec } = require('child_process');
-const keep_alive = require('./keep_alive.js')
 
 const client = new Discord.Client();
-const prefix = '!';
-client.on('ready', () => {
-  console.log(`Bot je online kao ${client.user.tag}!`);
-});
-
+const channelId = '1211437963364409434';
 
 client.on('message', (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  // Replace with your bot token
+  if (message.channel.id !== channelId || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  const command = message.content.trim();
 
-  if (command === 'command') {
-    if (args.length === 0) {
-      return message.reply('Morate navesti komandu koju želite izvršiti.');
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      return message.reply(`Error executing command: ${error.message}`);
     }
 
-    const terminalCommand = args.join(' ');
-
-    exec(terminalCommand, (error, stdout, stderr) => {
-      if (error) {
-        return message.reply(`Greška prilikom izvršavanja komande: ${error.message}`);
-      }
-
-      const output = stdout || stderr;
-      message.channel.send(`**Izlaz iz komande:**\n\`\`\`${output}\`\`\``);
-    });
-  }
+    const output = stdout || stderr;
+    message.channel.send(`**Command Output:**\n\`\`\`${output}\`\`\``);
+  });
 });
 
-// Dodajte svoj bot token ovde
+// Replace with your bot token
 client.login(process.env.TOKEN);
