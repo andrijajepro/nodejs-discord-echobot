@@ -4,6 +4,10 @@ const keep_alive = require('./keep_alive.js')
 
 const client = new Discord.Client();
 const prefix = '!';
+client.on('ready', () => {
+  console.log(`Bot je online kao ${client.user.tag}!`);
+});
+
 
 client.on('message', (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
