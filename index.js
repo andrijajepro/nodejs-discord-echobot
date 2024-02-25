@@ -49,4 +49,4 @@ client.on('ready', () => {
   }, 15 * 1000); // 15 seconds interval
 });
 // Dodajte svoj bot token ovde
-client.login('MTIxMTI1MjA3NjIwMjY5NjcxNA.Gct-jj.IErC4HCHuq72PAJASoB_Cuu1YNFtzkSNU0uj94');
+client.login(process.env.TOKEN);
