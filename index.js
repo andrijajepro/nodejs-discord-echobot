@@ -11,22 +11,23 @@ client.on('ready', () => {
 client.on('ready', () => {
   console.log(`Bot is online as ${client.user.tag}`);
 
-  // Set the interval to 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  // Set the interval to 15 seconds (15 seconds * 1000 milliseconds)
   setInterval(() => {
-  console.log('Executing the interval function.');
+    // Get the channel ID where you want to send the message
+    const channelId = '994666508254978220';
 
-  const channelId = '994666508254978220';
-  const channel = client.channels.cache.get(channelId);
+    // Fetch the channel by ID
+    const channel = client.channels.cache.get(channelId);
 
-  if (channel) {
-    console.log('Channel found, attempting to send message.');
-    channel.send('I\'m ok!')
-      .then(() => console.log('Message sent successfully.'))
-      .catch(error => console.error('Error sending message:', error));
-  } else {
-    console.error('Channel not found. Make sure the provided channel ID is correct.');
-  }
-}, 24 * 60 * 60 * 1000);
+    if (channel) {
+      // Send the message
+      channel.send('I\'m ok!')
+        .then(() => console.log('Message sent successfully.'))
+        .catch(error => console.error('Error sending message:', error));
+    } else {
+      console.error('Channel not found. Make sure the provided channel ID is correct.');
+    }
+  }, 15 * 1000); // 15 seconds interval
 });
 client.on('message', (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
