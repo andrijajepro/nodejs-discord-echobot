@@ -1,22 +1,33 @@
-const Discord = require('discord.js'); //import client from discord
+const Discord = require('discord.js');
+const { exec } = require('child_process');
 const keep_alive = require('./keep_alive.js')
+
 const client = new Discord.Client();
+const prefix = '!';
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+client.on('message', (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'command') {
+    if (args.length === 0) {
+      return message.reply('Morate navesti komandu koju želite izvršiti.');
+    }
+
+    const terminalCommand = args.join(' ');
+
+    exec(terminalCommand, (error, stdout, stderr) => {
+      if (error) {
+        return message.reply(`Greška prilikom izvršavanja komande: ${error.message}`);
+      }
+
+      const output = stdout || stderr;
+      message.channel.send(`**Izlaz iz komande:**\n\`\`\`${output}\`\`\``);
+    });
+  }
 });
 
-client.on('message', msg => {
-    // check if message isn't from us
-    if (msg.author == client.user) {
-      return;
-    }
-    else if (msg.content === 'ping') {
-      msg.reply('Pong!');
-    }
-    else {
-        msg.reply(msg.content);
-    }
-});
-
-client.login(process.env.TOKEN); //login bot using token
+// Dodajte svoj bot token ovde
+client.login('YOUR_BOT_TOKEN');
