@@ -30,4 +30,4 @@ client.on('message', (message) => {
 });
 
 // Dodajte svoj bot token ovde
-client.login('TOKEN');
+client.login(process.env.TOKEN);
