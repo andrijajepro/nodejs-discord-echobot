@@ -8,7 +8,26 @@ client.on('ready', () => {
   console.log(`Bot je online kao ${client.user.tag}!`);
 });
 
+client.on('ready', () => {
+  console.log(`Bot is online as ${client.user.tag}`);
 
+  // Set the interval to 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  setInterval(() => {
+    // Get the channel ID where you want to send the message
+    const channelId = '994666508254978220';
+
+    // Fetch the channel by ID
+    const channel = client.channels.cache.get(channelId);
+
+    if (channel) {
+      // Send the message
+      channel.send('I\'m ok!');
+      console.log('Sent "I\'m ok!" message.');
+    } else {
+      console.error('Channel not found. Make sure the provided channel ID is correct.');
+    }
+  }, 24 * 60 * 60 * 1000); // 24 hours interval
+});
 client.on('message', (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
