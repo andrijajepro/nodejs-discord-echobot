@@ -13,20 +13,20 @@ client.on('ready', () => {
 
   // Set the interval to 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
   setInterval(() => {
-    // Get the channel ID where you want to send the message
-    const channelId = '994666508254978220';
+  console.log('Executing the interval function.');
 
-    // Fetch the channel by ID
-    const channel = client.channels.cache.get(channelId);
+  const channelId = '994666508254978220';
+  const channel = client.channels.cache.get(channelId);
 
-    if (channel) {
-      // Send the message
-      channel.send('I\'m ok!');
-      console.log('Sent "I\'m ok!" message.');
-    } else {
-      console.error('Channel not found. Make sure the provided channel ID is correct.');
-    }
-  }, 24 * 60 * 60 * 1000); // 24 hours interval
+  if (channel) {
+    console.log('Channel found, attempting to send message.');
+    channel.send('I\'m ok!')
+      .then(() => console.log('Message sent successfully.'))
+      .catch(error => console.error('Error sending message:', error));
+  } else {
+    console.error('Channel not found. Make sure the provided channel ID is correct.');
+  }
+}, 24 * 60 * 60 * 1000);
 });
 client.on('message', (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
