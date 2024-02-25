@@ -2,23 +2,51 @@ const Discord = require('discord.js');
 const { exec } = require('child_process');
 
 const client = new Discord.Client();
-const channelId = '1211437963364409434';
+const prefix = '!';
 
 client.on('message', (message) => {
-  // Replace with your bot token
-  if (message.channel.id !== channelId || message.author.bot) return;
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  const command = message.content.trim();
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      return message.reply(`Error executing command: ${error.message}`);
+  if (command === 'command') {
+    if (args.length === 0) {
+      return message.reply('Morate navesti komandu koju želite izvršiti.');
     }
 
-    const output = stdout || stderr;
-    message.channel.send(`**Command Output:**\n\`\`\`${output}\`\`\``);
-  });
-});
+    const terminalCommand = args.join(' ');
 
-// Replace with your bot token
-client.login(process.env.TOKEN);
+    exec(terminalCommand, (error, stdout, stderr) => {
+      if (error) {
+        return message.reply(`Greška prilikom izvršavanja komande: ${error.message}`);
+      }
+
+      const output = stdout || stderr;
+      message.channel.send(`**Izlaz iz komande:**\n\`\`\`${output}\`\`\``);
+    });
+  }
+});
+client.on('ready', () => {
+  console.log(`Bot is online as ${client.user.tag}`);
+
+  // Set the interval to 15 seconds (15 seconds * 1000 milliseconds)
+  setInterval(() => {
+    // Get the channel ID where you want to send the message
+    const channelId = '1211437963364409434';
+
+    // Fetch the channel by ID
+    const channel = client.channels.cache.get(channelId);
+
+    if (channel) {
+      // Send the message
+      channel.send('I\'m ok!')
+        .then(() => console.log('Message sent successfully.'))
+        .catch(error => console.error('Error sending message:', error));
+    } else {
+      console.error('Channel not found. Make sure the provided channel ID is correct.');
+    }
+  }, 15 * 1000); // 15 seconds interval
+});
+// Dodajte svoj bot token ovde
+client.login('MTIxMTI1MjA3NjIwMjY5NjcxNA.Gct-jj.IErC4HCHuq72PAJASoB_Cuu1YNFtzkSNU0uj94');
